@@ -1,4 +1,11 @@
-api
-===
+Role Playing Game
+==================
 
-A Symfony project created on June 13, 2017, 6:49 pm.
+# Install Symfony and the bundles 
+
+git clone the project first 
+
+```bash
+cd api
+composer install
+```

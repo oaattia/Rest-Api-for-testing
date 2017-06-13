@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BaseEntity
 {
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */

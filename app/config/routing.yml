@@ -1,7 +1,4 @@
 role_based_game:
-    resource: "@RoleBasedGameBundle/Resources/config/routing.xml"
-    prefix:   /
-
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+    resource: "@RoleBasedGameBundle/Resources/config/routing_api.yml"
+    type: rest
+    prefix: /api

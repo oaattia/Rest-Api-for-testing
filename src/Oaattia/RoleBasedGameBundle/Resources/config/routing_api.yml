@@ -1,0 +1,11 @@
+role_based_game.users:
+    type: rest
+    resource: "@RoleBasedGameBundle/Controller/UserController.php"
+    name_prefix: oaattia.role_based_game.
+
+role_based_game.comments:
+    type: rest
+    parent: role_based_game.users
+    resource: "@RoleBasedGameBundle/Controller/CommentController.php"
+    name_prefix: oaattia.role_based_game.
+

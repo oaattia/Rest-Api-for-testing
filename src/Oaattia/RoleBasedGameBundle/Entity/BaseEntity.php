@@ -29,7 +29,10 @@ class BaseEntity
      */
     public function prePresist()
     {
-        $this->createdAt = new \DateTime("now");
+        if(is_null($this->createdAt)) {
+            $this->createdAt = new \DateTime("now");
+        }
+
         $this->updatedAt = new \DateTime("now");
     }
 

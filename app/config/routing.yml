@@ -1,3 +1,7 @@
+role_based_game:
+    resource: "@RoleBasedGameBundle/Resources/config/routing.xml"
+    prefix:   /
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation

@@ -16,27 +16,26 @@ use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
  */
 class RegisterController extends ApiController
 {
-
-
+    /**
+     * Register a new user
+     *
+     * @param Request $request
+     * @return json response
+     */
     public function postRegisterAction(Request $request)
     {
-        // we should validate first the request we got
-
         $user = new User();
-        $user->setEmail(
-            $request
-                ->get('email'))
-                ->setPassword(
-                    $this->get('security.password_encoder')->encodePassword($user, $request->get('password')
-                 )
-            );
+
+        $user->setEmail($request->get('email'))
+             ->setPassword($this->get('security.password_encoder')->encodePassword($user, $request->get('password')));
 
         $this->get('doctrine.orm.entity_manager')->persist($user);
         $this->get('doctrine.orm.entity_manager')->flush();
 
-        return $this->respond([ 'username' => "Created User" ], [
-            'link' => ''
+        return $this->respond(['username' => "Created User"], [
+            'link' => '',
         ]);
+
     }
 
 }

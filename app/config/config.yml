@@ -79,9 +79,11 @@ fos_rest:
     view:
         view_response_listener: 'force'
         formats:
-            json: true
+            json:
+                true
     routing_loader:
-          include_format:       false
+        include_format:
+            false
     format_listener:
         rules:
             - { path: ^/api, priorities: [ json ], fallback_format: json, prefer_extension: true }

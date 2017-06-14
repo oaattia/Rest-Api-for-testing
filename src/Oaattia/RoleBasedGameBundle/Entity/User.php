@@ -113,7 +113,7 @@ class User extends BaseEntity implements UserInterface
      */
     public function getSalt()
     {
-        // TODO: Implement getSalt() method.
+        return null;
     }
 
     /**

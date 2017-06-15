@@ -33,11 +33,11 @@ class RegisterController extends ApiController
         // Zay ma laravel 3amla, Request class
         // validate User first
 
-        $this->get('oaattia.role_based_game.registration_request')->handle($user);
+//        $this->get('oaattia.role_based_game.registration_request')->handle($user);
 
         $this->get('oaattia.role_based_game.user_manager')->createUser($user, $request);
 
-        return $this->respondCreated(['next' => $request->getBaseUrl(), 'prev' => $request->getClientIp()]);
+        return $this->respondCreated(['next' => "route after login let's say", 'prev' => 'current url if something happened']);
     }
 
 }

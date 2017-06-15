@@ -2,10 +2,14 @@
 
 namespace Oaattia\RoleBasedGameBundle\Controller;
 
+use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ApiController
+ * @package Oaattia\RoleBasedGameBundle\Controller
+ */
 class ApiController extends Controller
 {
     /**
@@ -44,7 +48,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondUnauthorizedError(string $message = 'Unauthorized!')
+    public function respondUnauthorizedError(string $message = 'Unauthorized!') : View
     {
         return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
     }
@@ -54,7 +58,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondForbiddenError(string $message = 'Forbidden!')
+    public function respondForbiddenError(string $message = 'Forbidden!') : View
     {
         return $this->setStatusCode(Response::HTTP_FORBIDDEN)->respondWithError($message);
     }
@@ -65,7 +69,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondNotFound(string $message = 'Not Found')
+    public function respondNotFound(string $message = 'Not Found') : View
     {
         return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
     }
@@ -76,19 +80,19 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondInternalError(string $message = 'Internal Error!')
+    public function respondInternalError(string $message = 'Internal Error!') : View
     {
         return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
     }
 
 
     /**
-     * Function to return a service unavailable response.
+     * Function to return a service unavailable response. 503
      *
      * @param string $message
      * @return mixed
      */
-    public function respondServiceUnavailable(string $message = "Service Unavailable!")
+    public function respondServiceUnavailable(string $message = "Service Unavailable!") : View
     {
         return $this->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)->respondWithError($message);
     }
@@ -100,7 +104,7 @@ class ApiController extends Controller
      *
      * @return mixed
      */
-    public function respondCreated(array $links, string $message = "Successfully Created") : array
+    public function respondCreated(array $links, string $message = "Successfully Created") : View
     {
         return $this->setStatusCode(Response::HTTP_CREATED)
             ->respond(
@@ -117,7 +121,7 @@ class ApiController extends Controller
      *
      * @return mixed
      */
-    public function respondOK(array $links, string $message = "Successfully OK") : array
+    public function respondOK(array $links, string $message = "Successfully OK") : View
     {
         return $this->setStatusCode(Response::HTTP_OK)
             ->respond(
@@ -127,24 +131,18 @@ class ApiController extends Controller
     }
 
 
-
-
     /**
      * Function to return a generic response.
      *
      * @param array $data
      * @param array $links
-     * @return array response
+     * @return View response
      */
-    private function respond(array $data, array $links) : array
+    private function respond(array $data, array $links) : View
     {
-        $responseLinks = array_merge([
-            "current" => "",
-        ], $links);
-
         $response = [
             "code" => $this->getStatusCode(),
-            "links" => $responseLinks,
+            "links" => $links,
         ];
 
         if (!key_exists('next', $links) || !key_exists('prev', $links)) {
@@ -163,7 +161,7 @@ class ApiController extends Controller
             );
         }
 
-        return $response;
+        return new View($response, $this->getStatusCode()); // 200 in this case
     }
 
     /**
@@ -172,16 +170,16 @@ class ApiController extends Controller
      * Shouldn't be called directly, but we should setStatus first for the error type
      *
      * @param string $message
-     * @return mixed
+     * @return View $response
      */
-    private function respondWithError(string $message) : array
+    private function respondWithError(string $message) : View
     {
-        return [
+        return new View([
             'error' => [
                 'code' => $this->getStatusCode(),
                 'message' => $message,
             ],
-        ];
+        ], $this->getStatusCode());
     }
 
 

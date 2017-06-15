@@ -5,8 +5,11 @@ namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
 use Oaattia\RoleBasedGameBundle\Entity\User;
+use Oaattia\RoleBasedGameBundle\Requests\RegistrationRequest;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @RouteResource(resource="User", pluralize=false)
@@ -26,16 +29,15 @@ class RegisterController extends ApiController
     {
         $user = new User();
 
-        $user->setEmail($request->get('email'))
-             ->setPassword($this->get('security.password_encoder')->encodePassword($user, $request->get('password')));
+        // handleRequest Class here to validate the request
+        // Zay ma laravel 3amla, Request class
+        // validate User first
 
-        $this->get('doctrine.orm.entity_manager')->persist($user);
-        $this->get('doctrine.orm.entity_manager')->flush();
+        $this->get('oaattia.role_based_game.registration_request')->handle($user);
 
-        return $this->respond(['username' => "Created User"], [
-            'link' => '',
-        ]);
+        $this->get('oaattia.role_based_game.user_manager')->createUser($user, $request);
 
+        return $this->respondCreated(['next' => $request->getBaseUrl(), 'prev' => $request->getClientIp()]);
     }
 
 }

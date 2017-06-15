@@ -3,6 +3,7 @@
 namespace Oaattia\RoleBasedGameBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
@@ -17,7 +18,7 @@ class ApiController extends Controller
      *
      * @return mixed
      */
-    public function getStatusCode()
+    public function getStatusCode() : int
     {
         return $this->statusCode;
     }
@@ -28,9 +29,9 @@ class ApiController extends Controller
      * for chaining purposes.
      *
      * @param mixed $statusCode
-     * @return current object.
+     * @return ApiController.
      */
-    public function setStatusCode($statusCode)
+    public function setStatusCode(int $statusCode) : ApiController
     {
         $this->statusCode = $statusCode;
 
@@ -43,7 +44,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondUnauthorizedError($message = 'Unauthorized!')
+    public function respondUnauthorizedError(string $message = 'Unauthorized!')
     {
         return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
     }
@@ -53,7 +54,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondForbiddenError($message = 'Forbidden!')
+    public function respondForbiddenError(string $message = 'Forbidden!')
     {
         return $this->setStatusCode(Response::HTTP_FORBIDDEN)->respondWithError($message);
     }
@@ -64,7 +65,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondNotFound($message = 'Not Found')
+    public function respondNotFound(string $message = 'Not Found')
     {
         return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
     }
@@ -75,7 +76,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondInternalError($message = 'Internal Error!')
+    public function respondInternalError(string $message = 'Internal Error!')
     {
         return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
     }
@@ -87,7 +88,7 @@ class ApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondServiceUnavailable($message = "Service Unavailable!")
+    public function respondServiceUnavailable(string $message = "Service Unavailable!")
     {
         return $this->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)->respondWithError($message);
     }
@@ -99,7 +100,7 @@ class ApiController extends Controller
      *
      * @return mixed
      */
-    public function respondCreated(string $message, array $links) : array
+    public function respondCreated(array $links, string $message = "Successfully Created") : array
     {
         return $this->setStatusCode(Response::HTTP_CREATED)
             ->respond(
@@ -109,6 +110,25 @@ class ApiController extends Controller
     }
 
 
+
+    /**
+     * @param string $message
+     * @param array $links
+     *
+     * @return mixed
+     */
+    public function respondOK(array $links, string $message = "Successfully OK") : array
+    {
+        return $this->setStatusCode(Response::HTTP_OK)
+            ->respond(
+                ['message' => $message],
+                $links
+            );
+    }
+
+
+
+
     /**
      * Function to return a generic response.
      *
@@ -116,7 +136,7 @@ class ApiController extends Controller
      * @param array $links
      * @return array response
      */
-    public function respond(array $data, array $links) : array
+    private function respond(array $data, array $links) : array
     {
         $responseLinks = array_merge([
             "current" => "",
@@ -126,6 +146,10 @@ class ApiController extends Controller
             "code" => $this->getStatusCode(),
             "links" => $responseLinks,
         ];
+
+        if (!key_exists('next', $links) || !key_exists('prev', $links)) {
+            return $this->respondInternalError("You have to include both next and previous links");
+        }
 
         if (key_exists('message', $data)) {
             $response = array_merge(
@@ -145,15 +169,17 @@ class ApiController extends Controller
     /**
      * Function to return an error response.
      *
-     * @param array $messages
+     * Shouldn't be called directly, but we should setStatus first for the error type
+     *
+     * @param string $message
      * @return mixed
      */
-    public function respondWithError(array $messages)
+    private function respondWithError(string $message) : array
     {
         return [
             'error' => [
                 'code' => $this->getStatusCode(),
-                'message' => $messages,
+                'message' => $message,
             ],
         ];
     }

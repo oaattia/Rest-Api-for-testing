@@ -15,11 +15,20 @@
     -->
 
     <services>
-        <!-- Default configuration for services in *this* file -->
-        <defaults autowire="true" autoconfigure="true" public="false" />
 
-        <!-- Load services from whatever directories you want (you can update this!) -->
-        <prototype namespace="Oaattia\RoleBasedGameBundle\" resource="../../../RoleBasedGameBundle/*" exclude="../../../RoleBasedGameBundle/{Entity,Repository,Tests}" />
+        <!--<defaults autowire="true" autoconfigure="true" public="false" />-->
+        <!--<prototype namespace="Oaattia\RoleBasedGameBundle\" resource="../../../RoleBasedGameBundle/*" exclude="../../../RoleBasedGameBundle/{Entity,Repository,Tests}" />-->
+
+
+
+        <service id="oaattia.role_based_game.user_manager" class="Oaattia\RoleBasedGameBundle\DomainManager\UserManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.password_encoder" />
+        </service>
+
+
+        <service class="Oaattia\RoleBasedGameBundle\Requests\RegistrationRequest" id="oaattia.role_based_game.registration_request" />
+
     </services>
 
 </container>

@@ -3,7 +3,9 @@
 namespace Oaattia\RoleBasedGameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -26,6 +28,7 @@ class User extends BaseEntity implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     *
      */
     private $email;
 
@@ -33,6 +36,7 @@ class User extends BaseEntity implements UserInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     *
      */
     private $password;
 

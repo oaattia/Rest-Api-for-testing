@@ -16,18 +16,9 @@
 
     <services>
 
-        <!--<defaults autowire="true" autoconfigure="true" public="false" />-->
-        <!--<prototype namespace="Oaattia\RoleBasedGameBundle\" resource="../../../RoleBasedGameBundle/*" exclude="../../../RoleBasedGameBundle/{Entity,Repository,Tests}" />-->
-
-
-
-        <service id="oaattia.role_based_game.user_manager" class="Oaattia\RoleBasedGameBundle\DomainManager\UserManager">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="security.password_encoder" />
-        </service>
-
-
-        <service class="Oaattia\RoleBasedGameBundle\Requests\RegistrationRequest" id="oaattia.role_based_game.registration_request" />
+        <service class="Oaattia\RoleBasedGameBundle\DomainManager\UserManager" id="oaattia.role_based_game.user_manager" autowire="true" public="true" />
+        <service class="Oaattia\RoleBasedGameBundle\Requests\UserRegistrationRequest" id="oaattia.role_based_game.registration_request" autowire="true" public="true" />
+        <service class="Oaattia\RoleBasedGameBundle\Validator\Validation" id="oaattia_role_based_game.validator.validation" autowire="true" public="true" />
 
     </services>
 

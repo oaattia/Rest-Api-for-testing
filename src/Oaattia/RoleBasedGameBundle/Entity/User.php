@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Oaattia\RoleBasedGameBundle\Repository\UserRepository")
+ * @UniqueEntity("email")
  */
 class User extends BaseEntity implements UserInterface
 {
@@ -28,6 +29,8 @@ class User extends BaseEntity implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      *
      */
     private $email;
@@ -36,6 +39,8 @@ class User extends BaseEntity implements UserInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\Length(min="5", max="25")
+     * @Assert\NotBlank()
      *
      */
     private $password;

@@ -8,17 +8,29 @@
 
 namespace Oaattia\RoleBasedGameBundle\Requests;
 
-
-use Oaattia\RoleBasedGameBundle\Entity\BaseEntity;
-use Oaattia\RoleBasedGameBundle\Entity\User;
+use Oaattia\RoleBasedGameBundle\Entity\EntityInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 interface RequestInterface
 {
 
     /**
-     * This class should contain the handler of the request itself
-     * @param BaseEntity $baseEntity
-     * @return
+     * Handle the incoming request
+     *
+     * This class should contain the handling for the request.
+     *
+     * @param Request $request
+     * @return EntityInterface
+     * @throws \HttpRequestException
      */
-    public function handle(User $user);
+    public function handle(Request $request) : EntityInterface;
+
+
+    /**
+     * Return the entity related to the request
+     *
+     * @param Request $request
+     * @return EntityInterface
+     */
+    public function getEntity(Request $request) : EntityInterface;
 }

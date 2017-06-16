@@ -46,7 +46,7 @@ class ApiController extends Controller
      * Function to return an unauthorized response.
      *
      * @param string $message
-     * @return mixed
+     * @return View
      */
     public function respondUnauthorizedError(string $message = 'Unauthorized!') : View
     {
@@ -56,7 +56,7 @@ class ApiController extends Controller
     /**
      * Function to return forbidden error response.
      * @param string $message
-     * @return mixed
+     * @return View
      */
     public function respondForbiddenError(string $message = 'Forbidden!') : View
     {
@@ -67,7 +67,7 @@ class ApiController extends Controller
      * Function to return a Not Found response.
      *
      * @param string $message
-     * @return mixed
+     * @return View
      */
     public function respondNotFound(string $message = 'Not Found') : View
     {
@@ -78,11 +78,24 @@ class ApiController extends Controller
      * Function to return an internal error response.
      *
      * @param string $message
-     * @return mixed
+     * @return View
      */
     public function respondInternalError(string $message = 'Internal Error!') : View
     {
         return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
+    }
+
+
+    /**
+     * Function to return an Unprocessed entity.
+     *
+     * @param array $violations
+     * @param string $message
+     * @return View
+     */
+    public function respondUnprocessedEntityError(array $violations, string $message = 'Validation Error!') : View
+    {
+        return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message, $violations);
     }
 
 
@@ -112,7 +125,6 @@ class ApiController extends Controller
                 $links
             );
     }
-
 
 
     /**
@@ -170,16 +182,23 @@ class ApiController extends Controller
      * Shouldn't be called directly, but we should setStatus first for the error type
      *
      * @param string $message
+     * @param array $violations
      * @return View $response
      */
-    private function respondWithError(string $message) : View
+    private function respondWithError(string $message, array $violations = []) : View
     {
-        return new View([
+        $format = [
             'error' => [
                 'code' => $this->getStatusCode(),
                 'message' => $message,
             ],
-        ], $this->getStatusCode());
+        ];
+
+        if (!is_null($violations)) {
+            $format = array_merge($format['error'], [ 'violations' => $violations ]);
+        }
+
+        return new View($format, $this->getStatusCode());
     }
 
 

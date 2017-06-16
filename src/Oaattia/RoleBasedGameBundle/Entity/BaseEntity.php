@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class BaseEntity
  * @package Oaattia\RoleBasedGameBundle\Entity
  */
-class BaseEntity
+class BaseEntity implements EntityInterface
 {
     /**
      * @ORM\Column(type="datetime", nullable=true)

@@ -7,21 +7,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks()
  *
  * Class BaseEntity
  * @package Oaattia\RoleBasedGameBundle\Entity
  */
-class BaseEntity implements EntityInterface
+abstract class BaseEntity implements EntityInterface
 {
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=false, unique=false)
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=false, unique=false)
      */
     private $updatedAt;
+
 
     /**
      * @ORM\PrePersist()

@@ -17,7 +17,9 @@
     <services>
 
         <service class="Oaattia\RoleBasedGameBundle\DomainManager\UserManager" id="oaattia.role_based_game.user_manager" autowire="true" public="true" />
-        <service class="Oaattia\RoleBasedGameBundle\Requests\UserRegistrationRequest" id="oaattia.role_based_game.registration_request" autowire="true" public="true" />
+        <service class="Oaattia\RoleBasedGameBundle\Requests\UserRegistrationRequest" id="oaattia.role_based_game.registration_request">
+                <argument id="security.user_password_encoder.generic" type="service"/>
+        </service>
         <service class="Oaattia\RoleBasedGameBundle\Validator\Validation" id="oaattia_role_based_game.validator.validation" autowire="true" public="true" />
 
     </services>

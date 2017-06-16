@@ -28,7 +28,7 @@ class User extends BaseEntity implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @ORM\Column(name="email", type="string", length=64, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
      *
@@ -38,12 +38,19 @@ class User extends BaseEntity implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
-     * @Assert\Length(min="5", max="25")
-     * @Assert\NotBlank()
+     * @ORM\Column(name="password", type="string", length=64)
      *
      */
     private $password;
+
+
+    /**
+     * plain password for validation
+     *
+     * @Assert\Length(max="4096")
+     * @Assert\NotBlank()
+     */
+    private $plainPassword;
 
     /**
      * Get id
@@ -102,6 +109,26 @@ class User extends BaseEntity implements UserInterface
     {
         return $this->password;
     }
+
+    /**
+     * @param $plainPassword
+     * @return $this
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
 
     /**
      * Returns the roles granted to the user

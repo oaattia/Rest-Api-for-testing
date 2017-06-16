@@ -113,32 +113,32 @@ class ApiController extends Controller
 
     /**
      * @param string $message
-     * @param array $links
+     * @param array $data
      *
      * @return mixed
      */
-    public function respondCreated(array $links, string $message = "Successfully Created") : View
+    public function respondCreated(array $data = [], string $message = "Successfully Created") : View
     {
         return $this->setStatusCode(Response::HTTP_CREATED)
             ->respond(
-                ['message' => $message],
-                $links
+                $data,
+                $message
             );
     }
 
 
     /**
      * @param string $message
-     * @param array $links
+     * @param array $data
      *
      * @return mixed
      */
-    public function respondOK(array $links, string $message = "Successfully OK") : View
+    public function respondOK(array $data = [], string $message = "Successfully OK") : View
     {
         return $this->setStatusCode(Response::HTTP_OK)
             ->respond(
-                ['message' => $message],
-                $links
+                $data,
+                $message
             );
     }
 
@@ -147,31 +147,16 @@ class ApiController extends Controller
      * Function to return a generic response.
      *
      * @param array $data
-     * @param array $links
+     * @param string $message
      * @return View response
      */
-    private function respond(array $data, array $links) : View
+    private function respond(array $data, string $message) : View
     {
         $response = [
             "code" => $this->getStatusCode(),
-            "links" => $links,
+            "message" => $message,
+            "data" => $data,
         ];
-
-        if (!key_exists('next', $links) || !key_exists('prev', $links)) {
-            return $this->respondInternalError("You have to include both next and previous links");
-        }
-
-        if (key_exists('message', $data)) {
-            $response = array_merge(
-                $response,
-                $data
-            );
-        } else {
-            $response = array_merge(
-                ['data' => $data ?? null],
-                $response
-            );
-        }
 
         return new View($response, $this->getStatusCode()); // 200 in this case
     }
@@ -194,7 +179,7 @@ class ApiController extends Controller
             ],
         ];
 
-        if (!is_null($violations)) {
+        if (!empty($violations)) {
             $format = array_merge($format['error'], ['violations' => $violations]);
         }
 

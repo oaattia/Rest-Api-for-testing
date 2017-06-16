@@ -4,6 +4,7 @@ namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
+use Oaattia\RoleBasedGameBundle\Entity\User;
 use Oaattia\RoleBasedGameBundle\Requests\RegistrationRequest;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,12 +35,7 @@ class AuthenticationController extends ApiController
 
         $this->get('oaattia.role_based_game.user_manager')->createUser($user);
 
-        return $this->respondCreated(
-            [
-                'next' =>  $this->generateUrl('oaattia.role_based_game.post_user_login'),
-                'prev' => $this->generateUrl($request->get('_route'))
-            ]
-        );
+        return $this->respondCreated();
     }
 
 
@@ -47,12 +43,34 @@ class AuthenticationController extends ApiController
      * Login user and generate JWT token
      *
      * @param Request $request
+     * @return \FOS\RestBundle\View\View
      */
     public function postLoginAction(Request $request)
     {
         $user = $this->get('oaattia.role_based_game.registration_request')->handle($request);
 
+        $foundUser = $this->getDoctrine()->getRepository(User::class)->findOneBy(
+            [
+                'email' => $user->getEmail(),
+            ]
+        );
 
+        $isValidPassword = $this->get('security.password_encoder')->isPasswordValid($foundUser, $request->get('password'));
+
+        if (!$isValidPassword || is_null($foundUser)) {
+            return $this->respondInternalError("Credentials not matching our records, please make sure you are using the right email and password");
+        }
+
+        $token = $this->get('lexik_jwt_authentication.encoder')->encode(
+            [
+                'username' => $foundUser->getUsername(),
+                'exp' => time() + 3600,
+            ]
+        );
+
+        return $this->respondOK([
+            'token' => $token,
+        ]);
     }
 
 

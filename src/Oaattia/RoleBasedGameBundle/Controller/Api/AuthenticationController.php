@@ -3,6 +3,7 @@
 namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
 use Oaattia\RoleBasedGameBundle\Entity\User;
 use Oaattia\RoleBasedGameBundle\Requests\RegistrationRequest;
@@ -55,23 +56,30 @@ class AuthenticationController extends ApiController
             ]
         );
 
-        $isValidPassword = $this->get('security.password_encoder')->isPasswordValid($foundUser, $request->get('password'));
+        $isValidPassword = $this->get('security.password_encoder')->isPasswordValid(
+            $foundUser,
+            $request->get('password')
+        );
 
         if (!$isValidPassword || is_null($foundUser)) {
-            return $this->respondInternalError("Credentials not matching our records, please make sure you are using the right email and password");
+            return $this->respondInternalError(
+                "Credentials not matching our records, please make sure you are using the right email and password"
+            );
         }
 
         $token = $this->get('lexik_jwt_authentication.encoder')->encode(
             [
                 'username' => $foundUser->getUsername(),
+                'email' => $foundUser->getUsername(),
                 'exp' => time() + 3600,
             ]
         );
 
-        return $this->respondOK([
-            'token' => $token,
-        ]);
+        return $this->respondOK(
+            [
+                'token' => $token,
+            ]
+        );
     }
-
 
 }

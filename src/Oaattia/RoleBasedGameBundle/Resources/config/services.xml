@@ -22,6 +22,8 @@
         </service>
         <service class="Oaattia\RoleBasedGameBundle\Validator\Validation" id="oaattia_role_based_game.validator.validation" autowire="true" public="true" />
 
+        <service class="Oaattia\RoleBasedGameBundle\Security\TokenAuthenticator" id="app.oaattia.role_based_game_authenticator.token.authenticator" autowire="true" public="true" />
+            
     </services>
 
 </container>

@@ -5,10 +5,15 @@ security:
     encoders:
             Oaattia\RoleBasedGameBundle\Entity\User: bcrypt
 
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+#        in_memory:
+#            memory: ~
+
+        user_provider:
+            entity:
+                class: Oaattia\RoleBasedGameBundle\Entity\User
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -17,11 +22,13 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            pattern:   ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - app.oaattia.role_based_game_authenticator.token.authenticator
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+            - { path: ^/api/user/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api/user/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#            - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

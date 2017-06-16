@@ -13,23 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserController
 {
-    public function postAction()
-    {
-        return [
-            "done",
-            Response::HTTP_CREATED
-        ];
-    }
-
-    public function putAction($id)
-    {
-        return [
-            "code" => Response::HTTP_OK,
-            "message" => "updated {$id}",
-        ];
-    }
-
-    public function getCommentAction($userId)
+    public function getAction()
     {
 
     }

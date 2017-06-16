@@ -16,23 +16,14 @@ class UserManager
     private $entityManager;
 
     /**
-     * @var PasswordEncoderInterface
-     */
-    private $passwordEncoder;
-
-
-    /**
      * UserManager constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param UserPasswordEncoder $passwordEncoder
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
-        UserPasswordEncoder $passwordEncoder
+        EntityManagerInterface $entityManager
     ) {
         $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**

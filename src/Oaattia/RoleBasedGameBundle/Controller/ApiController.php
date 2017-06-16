@@ -195,7 +195,7 @@ class ApiController extends Controller
         ];
 
         if (!is_null($violations)) {
-            $format = array_merge($format['error'], [ 'violations' => $violations ]);
+            $format = array_merge($format['error'], ['violations' => $violations]);
         }
 
         return new View($format, $this->getStatusCode());

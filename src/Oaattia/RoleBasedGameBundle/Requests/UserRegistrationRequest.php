@@ -5,10 +5,10 @@ namespace Oaattia\RoleBasedGameBundle\Requests;
 use Oaattia\RoleBasedGameBundle\Entity\EntityInterface;
 use Oaattia\RoleBasedGameBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 class UserRegistrationRequest implements RequestInterface
 {
-
     /**
      * @inheritdoc
      */
@@ -29,7 +29,7 @@ class UserRegistrationRequest implements RequestInterface
         $user = new User();
 
         $user->setEmail($request->get('email'))
-            ->setPassword($request->get('password'));
+             ->setPassword($request->get('password'));
 
         return $user;
     }

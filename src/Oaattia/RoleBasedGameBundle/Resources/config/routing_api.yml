@@ -5,6 +5,5 @@ role_based_game.users:
 
 role_based_game.registeration:
     type: rest
-    resource: "@RoleBasedGameBundle/Controller/Api/RegisterController.php"
+    resource: "@RoleBasedGameBundle/Controller/Api/AuthenticationController.php"
     name_prefix: oaattia.role_based_game.
-

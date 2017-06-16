@@ -10,11 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @RouteResource(resource="User", pluralize=false)
  *
- * Class RegisterController
+ * Class AuthenticationController
  * @package Oaattia\RoleBasedGameBundle\Controller
  */
-class RegisterController extends ApiController
+class AuthenticationController extends ApiController
 {
+
     /**
      * Register a new user
      *
@@ -34,8 +35,25 @@ class RegisterController extends ApiController
         $this->get('oaattia.role_based_game.user_manager')->createUser($user);
 
         return $this->respondCreated(
-            ['next' => "route after login let's say", 'prev' => 'current url if something happened']
+            [
+                'next' =>  $this->generateUrl('oaattia.role_based_game.post_user_login'),
+                'prev' => $this->generateUrl($request->get('_route'))
+            ]
         );
     }
+
+
+    /**
+     * Login user and generate JWT token
+     *
+     * @param Request $request
+     */
+    public function postLoginAction(Request $request)
+    {
+        $user = $this->get('oaattia.role_based_game.registration_request')->handle($request);
+
+
+    }
+
 
 }

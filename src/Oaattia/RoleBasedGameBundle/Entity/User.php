@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Oaattia\RoleBasedGameBundle\Repository\UserRepository")
- * @UniqueEntity("email")
+ * @UniqueEntity("email", groups={"registeration"})
  */
 class User extends BaseEntity implements UserInterface
 {
@@ -48,7 +48,7 @@ class User extends BaseEntity implements UserInterface
      * plain password for validation
      *
      * @Assert\Length(max="4096")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"registeration"})
      */
     private $plainPassword;
 

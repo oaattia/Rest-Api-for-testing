@@ -26,11 +26,12 @@ class Validation
      * Handle entity validation.
      *
      * @param EntityInterface $entity
+     * @param null $groups
      * @return array violation messages
      */
-    public function handle(EntityInterface $entity) : array
+    public function handle(EntityInterface $entity, $groups = null) : array
     {
-        $violations = $this->validator->validate($entity);
+        $violations = $this->validator->validate($entity, null, $groups);
 
         $keys = [];
         $values = [];

@@ -3,19 +3,24 @@
 namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\RouteResource;
-use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\View\View;
 
 /**
  * @RouteResource("User")
  *
- * Class DefaultController
+ * Class UserController
  * @package Oaattia\RoleBasedGameBundle\Controller
  */
 class UserController
 {
     public function getAction()
     {
+        return new View("hello world");
+    }
 
+    public function getTestAction()
+    {
+        return new View("hello world");
     }
 
 }

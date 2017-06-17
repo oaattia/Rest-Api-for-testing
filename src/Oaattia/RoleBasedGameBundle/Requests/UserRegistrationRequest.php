@@ -29,7 +29,7 @@ class UserRegistrationRequest implements RequestInterface
     public function handle(Request $request) : EntityInterface
     {
         if (is_null($request)) {
-            throw new \HttpRequestException("There is no request found");
+            throw new \HttpException("There is no request found");
         }
 
         return $this->getEntity($request);

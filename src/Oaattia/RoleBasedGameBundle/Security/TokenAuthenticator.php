@@ -3,10 +3,11 @@
 
 namespace Oaattia\RoleBasedGameBundle\Security;
 
-
-use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\ExpiredTokenException;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -21,20 +22,15 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * @var JWTEncoderInterface
      */
     private $encoder;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+
 
     /**
      * TokenAuthenticator constructor.
      * @param JWTEncoderInterface $encoder
-     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(JWTEncoderInterface $encoder, EntityManagerInterface $entityManager)
+    public function __construct(JWTEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -57,7 +53,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        return new Response("Un Authorized", Response::HTTP_UNAUTHORIZED);
+        return new JsonResponse(
+            [
+                'error' => [
+                    'code' => Response::HTTP_UNAUTHORIZED,
+                    'message' => "Un Authorized",
+                ],
+            ], Response::HTTP_UNAUTHORIZED
+        );
     }
 
     /**
@@ -114,11 +117,15 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = $credentials['token'];
+        try {
+            $token = $credentials['token'];
+            $signedData = $this->encoder->decode($token);
 
-        $signedData = $this->encoder->decode($token);
+            return $userProvider->loadUserByUsername($signedData['username']);
+        } catch (JWTDecodeFailureException $exception) {
+            return null;
+        }
 
-        return $userProvider->loadUserByUsername($signedData['username']);    // or email
     }
 
     /**
@@ -158,7 +165,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return new Response("Un Authorized", Response::HTTP_UNAUTHORIZED);
+        return new JsonResponse(
+            [
+                'error' => [
+                    'code' => Response::HTTP_UNAUTHORIZED,
+                    'message' => "Authentication failed, you may want to generate a new token as it's already expired",
+                ],
+            ], Response::HTTP_UNAUTHORIZED
+        );
     }
 
     /**

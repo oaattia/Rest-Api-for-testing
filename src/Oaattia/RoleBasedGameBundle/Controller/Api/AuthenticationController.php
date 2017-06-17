@@ -28,7 +28,7 @@ class AuthenticationController extends ApiController
     {
         $user = $this->get('oaattia.role_based_game.registration_request')->handle($request);
 
-        $violations = $this->get('oaattia_role_based_game.validator.validation')->handle($user);
+        $violations = $this->get('oaattia_role_based_game.validator.validation')->handle($user, ['registeration']);
 
         if (!empty($violations)) {
             return $this->respondUnprocessedEntityError($violations);
@@ -49,6 +49,12 @@ class AuthenticationController extends ApiController
     public function postLoginAction(Request $request)
     {
         $user = $this->get('oaattia.role_based_game.registration_request')->handle($request);
+
+        $violations = $this->get('oaattia_role_based_game.validator.validation')->handle($user);
+
+        if (!empty($violations)) {
+            return $this->respondUnprocessedEntityError($violations);
+        }
 
         $foundUser = $this->getDoctrine()->getRepository(User::class)->findOneBy(
             [

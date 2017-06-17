@@ -3,7 +3,6 @@
 namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\RouteResource;
-use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
 use Oaattia\RoleBasedGameBundle\Entity\User;
 use Oaattia\RoleBasedGameBundle\Requests\RegistrationRequest;
@@ -61,6 +60,10 @@ class AuthenticationController extends ApiController
                 'email' => $user->getEmail(),
             ]
         );
+
+        if (!$foundUser) {
+            return $this->respondNotFound("User not found");
+        }
 
         $isValidPassword = $this->get('security.password_encoder')->isPasswordValid(
             $foundUser,

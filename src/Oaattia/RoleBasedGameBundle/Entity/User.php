@@ -130,6 +130,7 @@ class User extends BaseEntity implements UserInterface
     }
 
 
+
     /**
      * Returns the roles granted to the user
      *

@@ -52,6 +52,13 @@ class User extends BaseEntity implements UserInterface
      */
     private $plainPassword;
 
+
+    /**
+     * @ORM\OneToOne(targetEntity="Character", cascade={"persist", "remove"})
+     */
+    private $character;
+
+
     /**
      * Get id
      *
@@ -129,7 +136,24 @@ class User extends BaseEntity implements UserInterface
         return $this->plainPassword;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCharacter()
+    {
+        return $this->character;
+    }
 
+    /**
+     * @param Character $character
+     * @return User
+     */
+    public function setCharacter(Character $character)
+    {
+        $this->character = $character;
+
+        return $this;
+    }
 
     /**
      * Returns the roles granted to the user

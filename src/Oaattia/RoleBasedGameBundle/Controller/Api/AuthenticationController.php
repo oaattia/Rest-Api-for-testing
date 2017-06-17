@@ -25,7 +25,10 @@ class AuthenticationController extends ApiController
      */
     public function postRegisterAction(Request $request)
     {
-        $user = $this->get('oaattia.role_based_game.registration_request')->handleRequest($request);
+        $user = $this->get('oaattia.role_based_game.registration_request')->handle(
+            $request->get('email'),
+            $request->get('password')
+        );
 
         $violations = $this->get('oaattia_role_based_game.validator.validation')->validate($user, ['registeration']);
 
@@ -47,7 +50,10 @@ class AuthenticationController extends ApiController
      */
     public function postLoginAction(Request $request)
     {
-        $user = $this->get('oaattia.role_based_game.registration_request')->handleRequest($request);
+        $user = $this->get('oaattia.role_based_game.registration_request')->handle(
+            $request->get('email'),
+            $request->get('password')
+        );
 
         $violations = $this->get('oaattia_role_based_game.validator.validation')->validate($user);
 

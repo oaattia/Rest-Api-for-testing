@@ -22,6 +22,6 @@ class CharacterController extends ApiController
      */
     public function postAction(Request $request)
     {
-        return $this->respondOK();
+
     }
 }

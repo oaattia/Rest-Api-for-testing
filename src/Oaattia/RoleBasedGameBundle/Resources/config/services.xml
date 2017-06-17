@@ -24,6 +24,9 @@
 
         <service class="Oaattia\RoleBasedGameBundle\Security\TokenAuthenticator" id="oaattia.role_based_game_authenticator.token.authenticator" autowire="true" public="true" />
 
+        <service class="Oaattia\RoleBasedGameBundle\Requests\CharacterRequest" id="oaattia_role_based_game.requests.character_request" />
+
+        <service class="Oaattia\RoleBasedGameBundle\DomainManager\CharacterManager" id="oaattia_role_based_game.domain_manager.character_manager" autowire="true" public="true" />
 
     </services>
 

@@ -5,9 +5,9 @@ namespace Oaattia\RoleBasedGameBundle\DomainManager;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oaattia\RoleBasedGameBundle\Entity\User;
+use Oaattia\RoleBasedGameBundle\Entity\Character;
 
-class UserManager
+class CharacterManager
 {
     /**
      * @var EntityManagerInterface
@@ -28,11 +28,11 @@ class UserManager
     /**
      * Create new user with email and password
      *
-     * @param User $user
+     * @param Character $character
      */
-    public function createUser(User $user)
+    public function createCharacter(Character $character)
     {
-        $this->entityManager->persist($user);
+        $this->entityManager->persist($character);
 
         $this->entityManager->flush();
     }

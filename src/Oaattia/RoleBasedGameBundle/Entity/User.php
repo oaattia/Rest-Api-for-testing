@@ -54,7 +54,7 @@ class User extends BaseEntity implements UserInterface
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Character", cascade={"persist", "remove"})
+     * @var $character
      */
     private $character;
 

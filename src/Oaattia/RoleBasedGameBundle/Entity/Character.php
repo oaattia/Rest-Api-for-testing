@@ -3,6 +3,7 @@
 namespace Oaattia\RoleBasedGameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Character
@@ -25,6 +26,8 @@ class Character extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=64)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="5", max="30")
      */
     private $title;
 
@@ -32,6 +35,8 @@ class Character extends BaseEntity
      * @var int
      *
      * @ORM\Column(name="attack", type="integer")
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="20")
      */
     private $attack;
 
@@ -39,12 +44,14 @@ class Character extends BaseEntity
      * @var int
      *
      * @ORM\Column(name="defense", type="integer")
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="20")
      */
     private $defense;
 
 
     /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="character")
+     * @ORM\OneToOne(targetEntity="User", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;

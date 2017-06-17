@@ -26,9 +26,9 @@ class AuthenticationController extends ApiController
      */
     public function postRegisterAction(Request $request)
     {
-        $user = $this->get('oaattia.role_based_game.registration_request')->handle($request);
+        $user = $this->get('oaattia.role_based_game.registration_request')->handleRequest($request);
 
-        $violations = $this->get('oaattia_role_based_game.validator.validation')->handle($user, ['registeration']);
+        $violations = $this->get('oaattia_role_based_game.validator.validation')->validate($user, ['registeration']);
 
         if (!empty($violations)) {
             return $this->respondUnprocessedEntityError($violations);
@@ -48,9 +48,9 @@ class AuthenticationController extends ApiController
      */
     public function postLoginAction(Request $request)
     {
-        $user = $this->get('oaattia.role_based_game.registration_request')->handle($request);
+        $user = $this->get('oaattia.role_based_game.registration_request')->handleRequest($request);
 
-        $violations = $this->get('oaattia_role_based_game.validator.validation')->handle($user);
+        $violations = $this->get('oaattia_role_based_game.validator.validation')->validate($user);
 
         if (!empty($violations)) {
             return $this->respondUnprocessedEntityError($violations);

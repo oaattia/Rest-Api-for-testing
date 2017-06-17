@@ -29,7 +29,7 @@ class Validation
      * @param null $groups
      * @return array violation messages
      */
-    public function handle(EntityInterface $entity, $groups = null) : array
+    public function validate(EntityInterface $entity, $groups = null) : array
     {
         $violations = $this->validator->validate($entity, null, $groups);
 

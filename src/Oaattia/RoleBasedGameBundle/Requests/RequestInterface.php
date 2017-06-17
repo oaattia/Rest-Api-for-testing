@@ -23,14 +23,14 @@ interface RequestInterface
      * @return EntityInterface
      * @throws \HttpRequestException
      */
-    public function handle(Request $request) : EntityInterface;
+    public function handleRequest(Request $request) : EntityInterface;
 
 
     /**
-     * Return the entity related to the request
+     * Return the entity after setting values to the it.
      *
-     * @param Request $request
+     * @param array $data
      * @return EntityInterface
      */
-    public function getEntity(Request $request) : EntityInterface;
+    public function setEntity(array $data) : EntityInterface;
 }

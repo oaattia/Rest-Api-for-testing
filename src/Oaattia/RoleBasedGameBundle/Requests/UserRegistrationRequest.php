@@ -26,25 +26,28 @@ class UserRegistrationRequest implements RequestInterface
     /**
      * @inheritdoc
      */
-    public function handle(Request $request) : EntityInterface
+    public function handleRequest(Request $request) : EntityInterface
     {
         if (is_null($request)) {
             throw new \HttpException("There is no request found");
         }
 
-        return $this->getEntity($request);
+        return $this->setEntity([
+            'email' => $request->get('email'),
+            'password' => $request->get('password')
+        ]);
     }
 
     /**
      * @inheritdoc
      */
-    public function getEntity(Request $request) : EntityInterface
+    public function setEntity(array $data) : EntityInterface
     {
         $user = new User();
 
-        $user =  $user->setPlainPassword($request->get('password'));
+        $user =  $user->setPlainPassword($data['password']);
 
-        $user->setEmail($request->get('email'))
+        $user->setEmail($data['email'])
              ->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
 
         return $user;

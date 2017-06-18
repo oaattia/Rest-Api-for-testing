@@ -34,4 +34,16 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
 
         return $user;
     }
+
+    /**
+     * find user by id with the related charcter
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function findOneCharacterByUserId($userId)
+    {
+        return $this->findOneById($userId);
+
+    }
 }

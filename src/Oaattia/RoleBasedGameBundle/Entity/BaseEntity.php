@@ -15,12 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class BaseEntity implements EntityInterface
 {
     /**
-     * @ORM\Column(type="datetime", nullable=false, unique=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=false, unique=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
 

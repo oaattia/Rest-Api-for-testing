@@ -2,6 +2,7 @@
 
 namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
 use Oaattia\RoleBasedGameBundle\Entity\User;
@@ -44,7 +45,11 @@ class CharacterController extends ApiController
             return $this->respondUnprocessedEntityError($violations);
         }
 
-        $this->get('oaattia_role_based_game.domain_manager.character_manager')->createCharacter($character);
+        try {
+            $this->get('oaattia_role_based_game.domain_manager.character_manager')->createCharacter($character);
+        } catch (UniqueConstraintViolationException $exception) {
+            return $this->respondInternalError("You already added your character, you can only have one character");
+        }
 
         return $this->respondCreated();
     }

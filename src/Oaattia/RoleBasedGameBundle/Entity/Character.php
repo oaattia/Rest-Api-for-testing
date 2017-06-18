@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Character
  *
- * @ORM\Table(name="character")
+ * @ORM\Table(name="`character`")
  * @ORM\Entity(repositoryClass="Oaattia\RoleBasedGameBundle\Repository\CharacterRepository")
  */
 class Character extends BaseEntity
@@ -51,8 +51,7 @@ class Character extends BaseEntity
 
 
     /**
-     * @ORM\OneToOne(targetEntity="User", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\OneToOne(targetEntity="User", inversedBy="character")
      */
     private $user;
 

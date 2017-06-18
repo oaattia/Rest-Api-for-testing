@@ -57,6 +57,13 @@ class Character extends BaseEntity
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="status", columnDefinition="ENUM('ready', 'paused')")
+     */
+    private $status;
+
+    /**
      * Get id
      *
      * @return int
@@ -138,7 +145,6 @@ class Character extends BaseEntity
         return $this->defense;
     }
 
-
     /**
      * @return mixed
      */
@@ -146,6 +152,7 @@ class Character extends BaseEntity
     {
         return $this->user;
     }
+
 
     /**
      * @param mixed $user
@@ -156,6 +163,22 @@ class Character extends BaseEntity
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 }
 

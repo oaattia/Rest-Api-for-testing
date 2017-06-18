@@ -35,13 +35,23 @@ class UserController extends ApiController
             return $this->respondNotFound("Character not found for this user");
         }
 
-        return $this->respondCreated(['character' => [
-            'title' => $user->getCharacter()->getTitle(),
-            'attack' => $user->getCharacter()->getAttack(),
-            'defense' => $user->getCharacter()->getDefense(),
-        ]]);
+        return $this->respondCreated(
+            [
+                'character' => [
+                    'title' => $user->getCharacter()->getTitle(),
+                    'attack' => $user->getCharacter()->getAttack(),
+                    'defense' => $user->getCharacter()->getDefense(),
+                ],
+            ]
+        );
     }
 
+
+    public function patchCharacterAttackAction()
+    {
+        // the current user and the score you want to attack
+        // there is default number to attack and it's 5 points
+    }
 
 
 }

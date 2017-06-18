@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\View\View;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
 use Oaattia\RoleBasedGameBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @RouteResource("User")
@@ -53,5 +54,30 @@ class UserController extends ApiController
         // there is default number to attack and it's 5 points
     }
 
+
+    /**
+     * Then method responsible for the user how want to explore
+     * and see if there is any character want to fight
+     * @param Request $request
+     * @return View|mixed
+     */
+    public function getExploreAction(Request $request)
+    {
+        $extracted = $this->get('oaattia.role_based_game_authenticator.token.authenticator')->getCredentials($request);
+        $data = $this->get('oaattia_role_based_game.security.token_encoder_decoder')->decode($extracted['token']);
+
+
+        // the user should here get list of the all characters that have status ready
+        $users = $this->getDoctrine()->getRepository(User::class)->findOtherReadyUsers($data['id']);
+
+        if (empty($users)) {
+            return $this->respondNotFound("There is no users ready for fighting");
+        }
+        var_dump($users);die();
+        return $this->respondOK([
+            'users' => $users
+        ]);
+
+    }
 
 }

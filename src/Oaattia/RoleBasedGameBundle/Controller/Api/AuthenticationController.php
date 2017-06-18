@@ -38,7 +38,9 @@ class AuthenticationController extends ApiController
 
         $this->get('oaattia.role_based_game.user_manager')->createUser($user);
 
-        return $this->respondCreated();
+        $token = $this->get('oaattia_role_based_game.security.token_encoder_decoder')->encode($user);
+
+        return $this->respondCreated(['token' => $token], "User created and authenticated");
     }
 
 
@@ -82,13 +84,7 @@ class AuthenticationController extends ApiController
             );
         }
 
-        $token = $this->get('lexik_jwt_authentication.encoder')->encode(
-            [
-                'username' => $foundUser->getUsername(),
-                'email' => $foundUser->getUsername(),
-                'exp' => time() + 3600,
-            ]
-        );
+        $token = $this->get('oaattia_role_based_game.security.token_encoder_decoder')->encode($user);
 
         return $this->respondOK(
             [

@@ -2,7 +2,9 @@
 
 namespace Oaattia\RoleBasedGameBundle\Repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
+use Oaattia\RoleBasedGameBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -36,14 +38,24 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     }
 
     /**
-     * find user by id with the related charcter
+     * find other ready users
      *
      * @param $userId
-     * @return mixed
+     * @return User
      */
-    public function findOneCharacterByUserId($userId)
+    public function findOtherReadyUsers($userId)
     {
-        return $this->findOneById($userId);
+        $query = $this->createQueryBuilder('u');
 
+        $query
+            ->select('u')
+            ->innerJoin('RoleBasedGameBundle:Character', 'c', 'WITH', 'u.id=c.user')
+            ->where('u.id != :id')
+            ->andWhere("c.status = 'ready'")
+            ->setParameter('id', $userId);
+
+        return $query->getQuery()->getResult();
     }
+
+
 }

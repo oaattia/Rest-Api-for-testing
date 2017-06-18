@@ -28,6 +28,11 @@
 
         <service class="Oaattia\RoleBasedGameBundle\DomainManager\CharacterManager" id="oaattia_role_based_game.domain_manager.character_manager" autowire="true" public="true" />
 
+        <service class="Oaattia\RoleBasedGameBundle\Security\TokenEncoderDecoder" id="oaattia_role_based_game.security.token_encoder_decoder" autowire="true" public="true" />
+
+        <service class="Doctrine\Common\Collections\ArrayCollection" id="doctrine.common.collections.array_collection" />
+
+        <service class="Oaattia\RoleBasedGameBundle\Transformers\UserTransformer" id="oaattia_role_based_game.transformers.user_transformer" autowire="true" public="true" />
     </services>
 
 </container>

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: oaattia
- * Date: 6/16/17
- * Time: 2:08 AM
- */
+
 
 namespace Oaattia\RoleBasedGameBundle\Entity;
 

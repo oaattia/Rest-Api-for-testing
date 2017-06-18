@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="Oaattia\RoleBasedGameBundle\Repository\UserRepository")
  * @UniqueEntity("email", groups={"registeration"})
  */

@@ -52,6 +52,9 @@ class CharacterController extends ApiController
             return $this->respondInternalError("You already added your character, you can only have one character");
         }
 
-        return $this->respondCreated();
+        return $this->respondCreated([], "Character for the user created");
     }
+
+
+
 }

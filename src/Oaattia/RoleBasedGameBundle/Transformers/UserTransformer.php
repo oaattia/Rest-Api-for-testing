@@ -1,32 +1,25 @@
 <?php
 
-
 namespace Oaattia\RoleBasedGameBundle\Transformers;
 
+use Oaattia\RoleBasedGameBundle\Entity\EntityInterface;
 
-class UserTransformer implements Transformer
+class UserTransformer extends Transformers
 {
 
     /**
      * @inheritdoc
      */
-    public function transform(array $elements) : array
+    public function transforming(EntityInterface $item) : array
     {
-        $data = [];
-
-        foreach ($elements as $item) {
-            $data[] = [
-                'username' => $item->getUsername(),
-                'email' => $item->getEmail(),
-                'password' => $item->getPassword(),
-                'character' => [
-                    'title' => $item->getCharacter()->getTitle(),
-                    'attack' => $item->getCharacter()->getAttack(),
-                    'defense' => $item->getCharacter()->getDefense(),
-                ],
-            ];
-        }
-
-        return $data;
+        return [
+            'username' => $item->getUsername(),
+            'email' => $item->getEmail(),
+            'character' => [
+                'title' => $item->getCharacter()->getTitle(),
+                'attack' => $item->getCharacter()->getAttack(),
+                'defense' => $item->getCharacter()->getDefense(),
+            ],
+        ];
     }
 }

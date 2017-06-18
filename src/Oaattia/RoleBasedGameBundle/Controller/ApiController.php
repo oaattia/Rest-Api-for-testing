@@ -192,9 +192,9 @@ class ApiController extends Controller
      * Get the current authenticated user from the request
      *
      * @param Request $request
-     * @return array
+     * @return User
      */
-    protected function getCurrentAuthenticatedUser(Request $request):array
+    protected function getCurrentAuthenticatedUser(Request $request) : User
     {
         $credentials = $this->get('oaattia.role_based_game_authenticator.token.authenticator')->getCredentials(
             $request

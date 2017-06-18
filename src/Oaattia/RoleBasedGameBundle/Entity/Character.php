@@ -216,12 +216,13 @@ class Character extends BaseEntity
      */
     public function attack()
     {
-        if ($this->status == 'attacked') {
+        if ($this->status == 'attacked' && $this->nextTurn == true) {
             throw new GamePlayException("You can't attack one's character already attacked");
         }
 
         $this->defense = $this->defense - 2;
         $this->status = 'attacked';
+        $this->nextTurn = true;
     }
 
 

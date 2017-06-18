@@ -80,4 +80,27 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     }
 
 
+    /**
+     * Find by user id the user ready for attack ( status ready or status attacked )
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function findUserByIdReadyForFight($userId)
+    {
+        $query = $this->createQueryBuilder('u');
+
+        $query
+            ->select('u')
+            ->innerJoin('RoleBasedGameBundle:Character', 'c', 'WITH', 'u.id=c.user')
+            ->where('u.id = :id')
+            ->andWhere("c.status = 'ready' OR c.status = 'attacked'")
+            ->setParameter('id', $userId);
+
+        return $query->getQuery()->getSingleResult();
+    }
+
+
+
+
 }

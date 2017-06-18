@@ -49,5 +49,5 @@ class CharacterController extends ApiController
 
         return $this->respondCreated([], "Character for the user created");
     }
-    
+
 }

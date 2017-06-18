@@ -62,24 +62,28 @@ class UserController extends ApiController
      * and change the status of the attacker to attacking
      * if the user has no point then it's status should be defeated
      *
+     * @param Request $request
      * @param $userId
      * @return View
      */
-    public function patchCharacterAttackAction($userId)
+    public function patchCharacterAttackAction(Request $request, $userId)
     {
+        $currentUser = $this->getCurrentAuthenticatedUser($request);
         try {
-            $user = $this->getDoctrine()->getRepository(User::class)->findUserByIdAndStatus($userId, 'ready');
+            if ($currentUser->getId() == $userId) {
+                return $this->respondForbiddenError("You can't attack yourself");
+            }
+            $user = $this->getDoctrine()->getRepository(User::class)->findUserByIdReadyForFight($userId);
         } catch (NoResultException $exception) {
             return $this->respondNotFound("The chosen user not found or not ready to be attacked");
         } catch (NonUniqueResultException $exception) {
-            return $this->respondNotFound("No user found with this user");
+            return $this->respondNotFound("More than one user returned");
         }
-
         try {
-        $this->get('oaattia.role_based_game.user_manager')->performAttackTo($user);
+            $this->get('oaattia.role_based_game.user_manager')->performAttackTo($user, $currentUser);
         } catch (GamePlayException $exception) {
             return $this->respondForbiddenError(
-                "You can't do another attack to the same person until this person do his attack first"
+                "You can't do another attack to the same person until this person do his attack first, wait your turn"
             );
         }
 

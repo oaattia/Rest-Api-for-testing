@@ -4,33 +4,29 @@
 namespace Oaattia\RoleBasedGameBundle\Transformers;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
-
-class UserTransformer
+class UserTransformer implements Transformer
 {
-    /**
-     * @var ArrayCollection
-     */
-    private $arrayCollection;
 
     /**
-     * UseTransformer constructor.
-     * @param ArrayCollection $arrayCollection
+     * @inheritdoc
      */
-    public function __construct(ArrayCollection $arrayCollection)
+    public function transform(array $elements) : array
     {
-        $this->arrayCollection = $arrayCollection;
-    }
+        $data = [];
 
+        foreach ($elements as $item) {
+            $data[] = [
+                'username' => $item->getUsername(),
+                'email' => $item->getEmail(),
+                'password' => $item->getPassword(),
+                'character' => [
+                    'title' => $item->getCharacter()->getTitle(),
+                    'attack' => $item->getCharacter()->getAttack(),
+                    'defense' => $item->getCharacter()->getDefense(),
+                ],
+            ];
+        }
 
-    public function transform(array $items)
-    {
-        return $this->arrayCollection->filter(
-            function ($item) use ($items) {
-                foreach ($items as $value) {
-                    return $value == $item;
-                }
-            }
-        );
+        return $data;
     }
 }

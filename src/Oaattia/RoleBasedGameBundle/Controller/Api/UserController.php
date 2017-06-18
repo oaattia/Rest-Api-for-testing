@@ -2,6 +2,7 @@
 
 namespace Oaattia\RoleBasedGameBundle\Controller\Api;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\View\View;
 use Oaattia\RoleBasedGameBundle\Controller\ApiController;
@@ -66,18 +67,17 @@ class UserController extends ApiController
         $extracted = $this->get('oaattia.role_based_game_authenticator.token.authenticator')->getCredentials($request);
         $data = $this->get('oaattia_role_based_game.security.token_encoder_decoder')->decode($extracted['token']);
 
-
         // the user should here get list of the all characters that have status ready
         $users = $this->getDoctrine()->getRepository(User::class)->findOtherReadyUsers($data['id']);
 
         if (empty($users)) {
             return $this->respondNotFound("There is no users ready for fighting");
         }
-        var_dump($users);die();
-        return $this->respondOK([
-            'users' => $users
-        ]);
 
+
+        return $this->respondOK([
+            'users' => $this->get('oaattia_role_based_game.transformers.user_transformer')->transform($users)
+        ]);
     }
 
 }

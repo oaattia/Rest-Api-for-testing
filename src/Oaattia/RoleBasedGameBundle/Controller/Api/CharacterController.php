@@ -25,12 +25,7 @@ class CharacterController extends ApiController
      */
     public function postAction(Request $request)
     {
-        $credentials = $this->get('oaattia.role_based_game_authenticator.token.authenticator')->getCredentials(
-            $request
-        );
-        $user = $this->get('lexik_jwt_authentication.encoder')->decode($credentials['token']);
-
-        $user = $this->getDoctrine()->getRepository(User::class)->loadUserByUsername($user['username']);
+        $user = $this->getCurrentAuthenticatedUser($request);
 
         $character = $this->get('oaattia_role_based_game.requests.character_request')->handle(
             $request->get('title'),
@@ -54,7 +49,5 @@ class CharacterController extends ApiController
 
         return $this->respondCreated([], "Character for the user created");
     }
-
-
-
+    
 }

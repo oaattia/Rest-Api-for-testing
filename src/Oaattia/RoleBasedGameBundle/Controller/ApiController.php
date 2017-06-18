@@ -3,7 +3,9 @@
 namespace Oaattia\RoleBasedGameBundle\Controller;
 
 use FOS\RestBundle\View\View;
+use Oaattia\RoleBasedGameBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -184,6 +186,24 @@ class ApiController extends Controller
         }
 
         return new View($format, $this->getStatusCode());
+    }
+
+    /**
+     * Get the current authenticated user from the request
+     *
+     * @param Request $request
+     * @return array
+     */
+    protected function getCurrentAuthenticatedUser(Request $request):array
+    {
+        $credentials = $this->get('oaattia.role_based_game_authenticator.token.authenticator')->getCredentials(
+            $request
+        );
+        $user = $this->get('lexik_jwt_authentication.encoder')->decode($credentials['token']);
+
+        $user = $this->getDoctrine()->getRepository(User::class)->loadUserByUsername($user['username']);
+
+        return $user;
     }
 
 

@@ -64,6 +64,15 @@ class Character extends BaseEntity
      */
     private $status;
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $nextTurn;
+
+
     /**
      * Get id
      *
@@ -183,6 +192,26 @@ class Character extends BaseEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function getNextTurn()
+    {
+        return $this->nextTurn;
+    }
+
+    /**
+     * @param mixed $nextTurn
+     * @return Character
+     */
+    public function setNextTurn($nextTurn)
+    {
+        $this->nextTurn = $nextTurn;
+
+        return $this;
+    }
+
+
+    /**
      * Every character can be attacked by two points
      */
     public function attack()
@@ -194,5 +223,7 @@ class Character extends BaseEntity
         $this->defense = $this->defense - 2;
         $this->status = 'attacked';
     }
+
+
 }
 

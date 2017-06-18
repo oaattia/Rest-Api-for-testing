@@ -36,7 +36,8 @@ class CharacterController extends ApiController
             $request->get('title'),
             $request->get('attack'),
             $request->get('defense'),
-            $user
+            $user,
+            "ready"
         );
 
         $violations = $this->get('oaattia_role_based_game.validator.validation')->validate($character);

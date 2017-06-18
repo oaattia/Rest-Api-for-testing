@@ -23,7 +23,8 @@ class CharacterRequest implements RequestInterface
             ->setTitle($data[0])
             ->setAttack($data[1])
             ->setDefense($data[2])
-            ->setUser($data[3]);
+            ->setUser($data[3])
+            ->setStatus($data[4]);
 
         return $character;
     }

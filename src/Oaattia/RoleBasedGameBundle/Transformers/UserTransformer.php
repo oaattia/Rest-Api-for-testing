@@ -13,12 +13,13 @@ class UserTransformer extends Transformers
     public function transforming(EntityInterface $item) : array
     {
         return [
-            'username' => $item->getUsername(),
+            'id' => $item->getId(),
             'email' => $item->getEmail(),
             'character' => [
                 'title' => $item->getCharacter()->getTitle(),
                 'attack' => $item->getCharacter()->getAttack(),
                 'defense' => $item->getCharacter()->getDefense(),
+                'status' => $item->getCharacter()->getStatus(),
             ],
         ];
     }

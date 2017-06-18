@@ -2,8 +2,9 @@
 
 namespace Oaattia\RoleBasedGameBundle\Repository;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Parameter;
 use Oaattia\RoleBasedGameBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -30,7 +31,7 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     {
         $user = $this->findOneByEmail($username);
 
-        if( !$user ) {
+        if (!$user) {
             throw new UsernameNotFoundException("Username not found");
         }
 
@@ -55,6 +56,27 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->setParameter('id', $userId);
 
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Find the user by ID and status
+     *
+     * @param $userId
+     * @param $status
+     * @return array
+     */
+    public function findUserByIdAndStatus($userId, $status)
+    {
+        $query = $this->createQueryBuilder('u');
+
+        $query
+            ->select('u')
+            ->innerJoin('RoleBasedGameBundle:Character', 'c', 'WITH', 'u.id=c.user')
+            ->where('u.id != :id')
+            ->andWhere('c.status = :status')
+            ->setParameters(['id' => $userId, 'status' => $status]);
+
+        return $query->getQuery()->getSingleResult();
     }
 
 

@@ -200,5 +200,6 @@ class User extends BaseEntity implements UserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
+
 }
 

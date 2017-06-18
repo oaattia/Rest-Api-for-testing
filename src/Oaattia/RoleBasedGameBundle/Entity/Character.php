@@ -3,6 +3,7 @@
 namespace Oaattia\RoleBasedGameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oaattia\RoleBasedGameBundle\Exceptions\GamePlayException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -59,7 +60,7 @@ class Character extends BaseEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="status", columnDefinition="ENUM('ready', 'paused')")
+     * @ORM\Column(name="status", columnDefinition="ENUM('ready', 'paused', 'attacked', 'defeated')")
      */
     private $status;
 
@@ -179,6 +180,19 @@ class Character extends BaseEntity
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * Every character can be attacked by two points
+     */
+    public function attack()
+    {
+        if ($this->status == 'attacked') {
+            throw new GamePlayException("You can't attack one's character already attacked");
+        }
+
+        $this->defense = $this->defense - 2;
+        $this->status = 'attacked';
     }
 }
 
